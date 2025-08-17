@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Live College Status</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  padding: 20px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+h1 {
+  font-size: clamp(24px, 5vw, 36px);
+  margin-bottom: 20px;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: titleBounce 2s ease-in-out infinite;
+}
+
+@keyframes titleBounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+#status {
+  font-size: clamp(18px, 4vw, 24px);
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  display: inline-block;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  max-width: 90%;
+  min-width: 300px;
+  position: relative;
+  overflow: hidden;
+  transform: perspective(1000px);
+  transition: all 0.3s ease;
+}
+
+#status::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+  transform: rotate(45deg);
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+.activity-character {
+  width: 120px;
+  height: 120px;
+  margin: 20px auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Studying Animation - Character at laptop */
+.studying-character {
+  width: 150px;
+  height: 120px;
+  position: relative;
+}
+
+.studying-character .head {
+  width: 40px;
+  height: 40px;
+  background: #ffdbac;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: headNod 3s ease-in-out infinite;
+}
+
+.studying-character .body {
+  width: 30px;
+  height: 40px;
+  background: #3498db;
+  border-radius: 10px;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.studying-character .laptop {
+  width: 80px;
+  height: 50px;
+  background: #ddd;
+  border-radius: 5px;
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.studying-character .laptop::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background: #555;
+  top: -5px;
+  left: 0;
+  border-radius: 5px 5px 0 0;
+}
+
+.studying-character .screen {
+  width: 70px;
+  height: 40px;
+  background: #a5d6ff;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.studying-character .screen::before {
+  content: '0101';
+  position: absolute;
+  font-family: monospace;
+  font-size: 8px;
+  color: #333;
+  animation: codeScroll 5s linear infinite;
+}
+
+.studying-character .hands {
+  width: 60px;
+  height: 20px;
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.studying-character .hand {
+  width: 15px;
+  height: 10px;
+  background: #ffdbac;
+  position: absolute;
+  top: 0;
+  border-radius: 5px;
+  animation: typing 1s ease-in-out infinite alternate;
+}
+
+.studying-character .hand.left {
+  left: 0;
+}
+
+.studying-character .hand.right {
+  right: 0;
+}
+
+@keyframes headNod {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  25% { transform: translateX(-50%) rotate(5deg); }
+  75% { transform: translateX(-50%) rotate(-5deg); }
+}
+
+@keyframes typing {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(5px); }
+}
+
+@keyframes codeScroll {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); }
+}
+
+/* Bike Riding Animation */
+.biking-character {
+  width: 150px;
+  height: 100px;
+  position: relative;
+  animation: bikeMove 2s linear infinite;
+}
+
+.biking-character .head {
+  width: 30px;
+  height: 30px;
+  background: #ffdbac;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 60px;
+}
+
+.biking-character .body {
+  width: 20px;
+  height: 40px;
+  background: #e74c3c;
+  position: absolute;
+  top: 30px;
+  left: 65px;
+}
+
+.biking-character .bike {
+  width: 100px;
+  height: 50px;
+  position: absolute;
+  top: 50px;
+  left: 25px;
+}
+
+.biking-character .wheel {
+  width: 40px;
+  height: 40px;
+  border: 5px solid #333;
+  border-radius: 50%;
+  position: absolute;
+  animation: wheelRotate 0.5s linear infinite;
+}
+
+.biking-character .wheel.front {
+  left: 0;
+}
+
+.biking-character .wheel.back {
+  right: 0;
+}
+
+.biking-character .pedals {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+.biking-character .pedal {
+  width: 30px;
+  height: 5px;
+  background: #333;
+  position: absolute;
+  animation: pedalRotate 0.5s linear infinite;
+  transform-origin: left center;
+}
+
+.biking-character .pedal.left {
+  top: 30px;
+  left: 0;
+}
+
+.biking-character .pedal.right {
+  top: 30px;
+  left: 0;
+  transform: rotate(180deg);
+  transform-origin: left center;
+}
+
+@keyframes bikeMove {
+  0% { transform: translateX(-20px); }
+  100% { transform: translateX(20px); }
+}
+
+@keyframes wheelRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pedalRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Running Animation */
+.running-character {
+  width: 100px;
+  height: 120px;
+  position: relative;
+  animation: runMove 0.6s linear infinite;
+}
+
+.running-character .head {
+  width: 30px;
+  height: 30px;
+  background: #ffdbac;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 35px;
+}
+
+.running-character .body {
+  width: 20px;
+  height: 40px;
+  background: #2ecc71;
+  position: absolute;
+  top: 30px;
+  left: 40px;
+}
+
+.running-character .leg {
+  width: 10px;
+  height: 30px;
+  background: #ffdbac;
+  position: absolute;
+  top: 70px;
+  animation: legMove 0.3s linear infinite alternate;
+}
+
+.running-character .leg.left {
+  left: 35px;
+}
+
+.running-character .leg.right {
+  left: 55px;
+  animation-delay: 0.15s;
+}
+
+.running-character .arm {
+  width: 8px;
+  height: 25px;
+  background: #ffdbac;
+  position: absolute;
+  top: 35px;
+  animation: armMove 0.3s linear infinite alternate;
+}
+
+.running-character .arm.left {
+  left: 30px;
+}
+
+.running-character .arm.right {
+  left: 62px;
+  animation-delay: 0.15s;
+}
+
+@keyframes runMove {
+  0% { transform: translateX(-10px); }
+  100% { transform: translateX(10px); }
+}
+
+@keyframes legMove {
+  0% { transform: rotate(10deg); }
+  100% { transform: rotate(-10deg); }
+}
+
+@keyframes armMove {
+  0% { transform: rotate(-20deg); }
+  100% { transform: rotate(20deg); }
+}
+
+/* Relaxing Animation */
+.relaxing-character {
+  width: 120px;
+  height: 100px;
+  position: relative;
+}
+
+.relaxing-character .head {
+  width: 30px;
+  height: 30px;
+  background: #ffdbac;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 45px;
+  animation: relaxHead 3s ease-in-out infinite;
+}
+
+.relaxing-character .body {
+  width: 40px;
+  height: 50px;
+  background: #9b59b6;
+  border-radius: 20px 20px 0 0;
+  position: absolute;
+  top: 30px;
+  left: 40px;
+}
+
+.relaxing-character .arm {
+  width: 10px;
+  height: 30px;
+  background: #ffdbac;
+  position: absolute;
+  top: 35px;
+  border-radius: 5px;
+  animation: relaxArm 3s ease-in-out infinite;
+}
+
+.relaxing-character .arm.left {
+  left: 30px;
+  transform-origin: top center;
+}
+
+.relaxing-character .arm.right {
+  left: 80px;
+  transform-origin: top center;
+}
+
+.relaxing-character .leg {
+  width: 10px;
+  height: 30px;
+  background: #ffdbac;
+  position: absolute;
+  top: 80px;
+  border-radius: 0 0 5px 5px;
+}
+
+.relaxing-character .leg.left {
+  left: 45px;
+}
+
+.relaxing-character .leg.right {
+  left: 65px;
+}
+
+@keyframes relaxHead {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(5deg); }
+  75% { transform: rotate(-5deg); }
+}
+
+@keyframes relaxArm {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(20deg); }
+}
+
+/* Eating Animation */
+.eating-character {
+  width: 120px;
+  height: 120px;
+  position: relative;
+}
+
+.eating-character .head {
+  width: 40px;
+  height: 40px;
+  background: #ffdbac;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  animation: chew 1s ease-in-out infinite;
+}
+
+.eating-character .body {
+  width: 30px;
+  height: 40px;
+  background: #e67e22;
+  border-radius: 10px;
+  position: absolute;
+  top: 40px;
+  left: 45px;
+}
+
+.eating-character .arm {
+  width: 10px;
+  height: 25px;
+  background: #ffdbac;
+  position: absolute;
+  top: 45px;
+  border-radius: 5px;
+  animation: armMoveToMouth 1.5s ease-in-out infinite;
+}
+
+.eating-character .arm.left {
+  left: 30px;
+  transform-origin: top center;
+}
+
+.eating-character .food {
+  width: 10px;
+  height: 10px;
+  background: #f1c40f;
+  border-radius: 50%;
+  position: absolute;
+  top: 60px;
+  left: 25px;
+  animation: foodMove 1.5s linear infinite;
+}
+
+@keyframes chew {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes armMoveToMouth {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-60deg); }
+}
+
+@keyframes foodMove {
+  0% { transform: translate(0, 0); opacity: 1; }
+  50% { transform: translate(20px, -20px); opacity: 1; }
+  51% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Home Sweet Home */
+.home-character {
+  width: 120px;
+  height: 120px;
+  position: relative;
+}
+
+.home-character .house {
+  width: 80px;
+  height: 60px;
+  background: #d35400;
+  position: absolute;
+  top: 30px;
+  left: 20px;
+}
+
+.home-character .roof {
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 30px solid #c0392b;
+  position: absolute;
+  top: 0;
+  left: 10px;
+}
+
+.home-character .door {
+  width: 20px;
+  height: 30px;
+  background: #8e44ad;
+  position: absolute;
+  bottom: 0;
+  left: 40px;
+}
+
+.home-character .window {
+  width: 15px;
+  height: 15px;
+  background: #3498db;
+  border-radius: 50%;
+  position: absolute;
+  top: 40px;
+  left: 25px;
+}
+
+.home-character .person {
+  width: 20px;
+  height: 40px;
+  position: absolute;
+  bottom: 0;
+  left: 70px;
+  animation: personWave 2s ease-in-out infinite;
+}
+
+.home-character .person .head {
+  width: 15px;
+  height: 15px;
+  background: #ffdbac;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  left: 2px;
+}
+
+.home-character .person .body {
+  width: 10px;
+  height: 20px;
+  background: #2ecc71;
+  position: absolute;
+  top: 15px;
+  left: 5px;
+}
+
+.home-character .person .arm {
+  width: 15px;
+  height: 5px;
+  background: #ffdbac;
+  position: absolute;
+  top: 20px;
+  transform-origin: left center;
+  animation: armWave 2s ease-in-out infinite;
+}
+
+.home-character .person .arm.left {
+  left: -5px;
+}
+
+.home-character .person .arm.right {
+  left: 10px;
+}
+
+@keyframes personWave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes armWave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(30deg); }
+}
+
+.status-text {
+  position: relative;
+  z-index: 2;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.time-display {
+  font-size: 16px;
+  color: #666;
+  margin-top: 15px;
+  font-weight: normal;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  body { padding: 10px; }
+  #status { padding: 20px; min-width: 250px; }
+}
+
+/* Pulse effect for current activity */
+.current-activity {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+  50% { box-shadow: 0 8px 32px rgba(255,215,0,0.6), 0 0 30px rgba(255,215,0,0.4); }
+  100% { box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+}
+</style>
+</head>
+<body>
+<h1>📍 Ismail's Location</h1>
+<div id="status">
+  <div class="status-text">Loading...</div>
+  <div class="activity-character" id="character-container"></div>
+  <div class="time-display" id="current-time"></div>
+</div>
+
+<script>
+// Enhanced timetable with animated characters
+const timetable = {
+  Monday: [
+    { start: "09:00", end: "09:50", activity: "Discrete Mathematics", character: "studying", class: "studying-character" },
+    { start: "10:00", end: "10:50", activity: "Communication Skills", character: "studying", class: "studying-character" },
+    { start: "12:00", end: "12:50", activity: "Data Structures", character: "studying", class: "studying-character" },
+    { start: "16:00", end: "18:00", activity: "DBMS Practical", character: "studying", class: "studying-character" }
+  ],
+  Tuesday: [
+    { start: "09:00", end: "09:50", activity: "Intro to Programming", character: "studying", class: "studying-character" },
+    { start: "11:00", end: "11:50", activity: "Communication Skills", character: "studying", class: "studying-character" },
+    { start: "12:00", end: "12:50", activity: "DBMS", character: "studying", class: "studying-character" },
+    { start: "16:00", end: "18:00", activity: "DBMS Practical", character: "studying", class: "studying-character" }
+  ],
+  Wednesday: [
+    { start: "09:00", end: "09:50", activity: "Intro to Programming", character: "studying", class: "studying-character" },
+    { start: "12:00", end: "12:50", activity: "Data Structures", character: "studying", class: "studying-character" },
+    { start: "16:00", end: "18:00", activity: "DS Practical", character: "studying", class: "studying-character" }
+  ],
+  Thursday: [
+    { start: "09:00", end: "09:50", activity: "Communication Skills", character: "studying", class: "studying-character" },
+    { start: "10:00", end: "10:50", activity: "Discrete Mathematics", character: "studying", class: "studying-character" },
+    { start: "11:00", end: "11:50", activity: "Intro to Programming", character: "studying", class: "studying-character" },
+    { start: "12:00", end: "12:50", activity: "DBMS", character: "studying", class: "studying-character" },
+    { start: "14:00", end: "14:50", activity: "Maths (TA)", character: "studying", class: "studying-character" },
+    { start: "16:00", end: "18:00", activity: "Intro to Programming Practical", character: "studying", class: "studying-character" }
+  ],
+  Friday: [
+    { start: "09:00", end: "09:50", activity: "Discrete Mathematics", character: "studying", class: "studying-character" },
+    { start: "12:00", end: "12:50", activity: "Data Structures", character: "studying", class: "studying-character" }
+  ],
+  Saturday: [
+    { start: "00:00", end: "23:59", activity: "Home - Relaxing", character: "relaxing", class: "relaxing-character" }
+  ],
+  Sunday: [
+    { start: "00:00", end: "23:59", activity: "Home - Family Time", character: "home", class: "home-character" }
+  ]
+};
+
+// Special time periods
+const specialTimes = {
+  lunch: { start: "13:00", end: "14:00", activity: "Lunch Break", character: "eating", class: "eating-character" }
+};
+
+function getFirstLectureTime(daySchedule) {
+  if (!daySchedule || daySchedule.length === 0) return null;
+  return daySchedule[0].start;
+}
+
+function getLastLectureTime(daySchedule) {
+  if (!daySchedule || daySchedule.length === 0) return null;
+  return daySchedule[daySchedule.length - 1].end;
+}
+
+function timeToMinutes(timeStr) {
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return hours * 60 + minutes;
+}
+
+function minutesToTime(minutes) {
+  const hrs = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+}
+
+function getCommutingTimes(daySchedule) {
+  const firstLecture = getFirstLectureTime(daySchedule);
+  const lastLecture = getLastLectureTime(daySchedule);
+  
+  if (!firstLecture || !lastLecture) return null;
+  
+  // Calculate going to college time (1 hour before first lecture)
+  const firstLectureMins = timeToMinutes(firstLecture);
+  const goingToCollegeStart = minutesToTime(firstLectureMins - 60);
+  const goingToCollegeEnd = firstLecture;
+  
+  // Calculate going home time (from last lecture end to 1 hour after)
+  const lastLectureMins = timeToMinutes(lastLecture);
+  const goingHomeStart = lastLecture;
+  const goingHomeEnd = minutesToTime(lastLectureMins + 60);
+  
+  return {
+    goingToCollege: { start: goingToCollegeStart, end: goingToCollegeEnd },
+    goingHome: { start: goingHomeStart, end: goingHomeEnd }
+  };
+}
+
+function getCurrentActivity() {
+  const now = new Date();
+  const dayName = now.toLocaleDateString("en-US", { weekday: "long" });
+  const current = now.toTimeString().slice(0,5);
+  const todaySchedule = timetable[dayName];
+  
+  // Check commuting times first
+  const commutingTimes = getCommutingTimes(todaySchedule);
+  
+  if (commutingTimes) {
+    // Check if current time is during going to college
+    if (current >= commutingTimes.goingToCollege.start && current <= commutingTimes.goingToCollege.end) {
+      return { 
+        activity: "Going to College", 
+        character: "biking", 
+        class: "biking-character",
+        direction: "to-college"
+      };
+    }
+    
+    // Check if current time is during going home
+    if (current >= commutingTimes.goingHome.start && current <= commutingTimes.goingHome.end) {
+      return { 
+        activity: "Going Back Home", 
+        character: "biking", 
+        class: "biking-character",
+        direction: "to-home"
+      };
+    }
+  }
+  
+  // Check special times (like lunch)
+  for (let [key, special] of Object.entries(specialTimes)) {
+    if (current >= special.start && current <= special.end) {
+      return special;
+    }
+  }
+  
+  if (!todaySchedule) {
+    return { activity: "No schedule for today", character: "free", class: "free-character" };
+  }
+  
+  // Check current class
+  for (let slot of todaySchedule) {
+    if (current >= slot.start && current <= slot.end) {
+      return { activity: "Now: " + slot.activity, character: slot.character, class: slot.class };
+    }
+  }
+  
+  // Default free time
+  return { activity: "Free Time - At Campus", character: "free", class: "free-character" };
+}
+
+function updateStatus() {
+  const currentActivity = getCurrentActivity();
+  const now = new Date();
+  const timeString = now.toLocaleTimeString();
+  
+  const statusDiv = document.getElementById("status");
+  const characterContainer = document.getElementById("character-container");
+  const textDiv = statusDiv.querySelector(".status-text");
+  const timeDiv = document.getElementById("current-time");
+  
+  // Update content
+  textDiv.textContent = currentActivity.activity;
+  timeDiv.textContent = `Current time: ${timeString}`;
+  
+  // Remove all animation classes and clear container
+  characterContainer.className = "activity-character";
+  characterContainer.innerHTML = '';
+  
+  // Add the appropriate character animation
+  if (currentActivity.class) {
+    characterContainer.classList.add(currentActivity.class);
+    
+    // Create character elements based on activity
+    if (currentActivity.class === "studying-character") {
+      characterContainer.innerHTML = `
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="laptop">
+          <div class="screen"></div>
+        </div>
+        <div class="hands">
+          <div class="hand left"></div>
+          <div class="hand right"></div>
+        </div>
+      `;
+    } else if (currentActivity.class === "biking-character") {
+      // Add direction class if available
+      const directionClass = currentActivity.direction === "to-home" ? "bike-home" : "bike-college";
+      characterContainer.innerHTML = `
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="bike ${directionClass}">
+          <div class="wheel front"></div>
+          <div class="wheel back"></div>
+          <div class="pedals">
+            <div class="pedal left"></div>
+            <div class="pedal right"></div>
+          </div>
+        </div>
+      `;
+    } else if (currentActivity.class === "eating-character") {
+      characterContainer.innerHTML = `
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="arm left"></div>
+        <div class="food"></div>
+      `;
+    } else if (currentActivity.class === "relaxing-character") {
+      characterContainer.innerHTML = `
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="arm left"></div>
+        <div class="arm right"></div>
+        <div class="leg left"></div>
+        <div class="leg right"></div>
+      `;
+    } else if (currentActivity.class === "home-character") {
+      characterContainer.innerHTML = `
+        <div class="roof"></div>
+        <div class="house">
+          <div class="door"></div>
+          <div class="window"></div>
+        </div>
+        <div class="person">
+          <div class="head"></div>
+          <div class="body"></div>
+          <div class="arm left"></div>
+          <div class="arm right"></div>
+        </div>
+      `;
+    }
+  }
+  
+  // Add pulse effect for current activity
+  statusDiv.classList.add("current-activity");
+}
+
+// Initialize
+updateStatus();
+setInterval(updateStatus, 1000); // Update every second
+</script>
+</body>
+</html>
